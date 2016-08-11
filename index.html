@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turtle Facts and Quiz</title>
+  <!-- Bootstrap css and my own css -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="my.css">
+</head>
+<body>
+  <div ng-controller="mainController">
+    <div style="width:1200px;margin-top:30px"> 
+
+     <div style="width:800px;float:left">
+      <div style="width:800px">
+        <div style="float:left"><h4>TaskList<h4>
+        </div>
+        <div style="float:right"><button class="btn btn-primary" ng-click="createTask()">Create Task</button>
+        </div>                    
+      </div>
+      <br> 
+
+      <table  class="table table-hover" >
+        <tr style="background-color: #2851a4;color:white">
+          <th >Title</th>
+          <th >Priority</th>
+          <th  >Status</th>
+          <th  >Duedate</th>
+          <th >Date Created</th>
+          <th >Date Modified</th>
+        </tr>   
+        <tbody ng-repeat="list in tasklist">
+          <tr  ng-click="showData($index)">
+            <td>{{list.title}}</td>
+            <td>{{list.Priority}}</td>
+            <td>{{list.Status}}</td>
+            <td>{{list.DueDate |date:short}}</td>
+            <td>{{list.DateCreated | date: 'MM/dd/yyyy  h:mma'}}</td>
+            <td>{{list.DateModified |date: 'MM/dd/yyyy  h:mma'}}</td>
+
+            <tr ng-repeat="task in list.taskname" ng-click="showsubtaskData(task)">
+              <td ><span style="margin-left:15px;color:red">{{task.title}}</span></td>
+              <td>{{task.Priority}}</td>
+              <td>{{task.Status}}</td>
+              <td>{{task.DueDate |date:short}}</td>
+              <td>{{task.DateCreated | date: 'MM/dd/yyyy  h:mma'}}</td>
+              <td>{{task.DateModified |date: 'MM/dd/yyyy  h:mma'}}</td>
+            </tr>
+          </tr>
+        </table>
+      </div>
+
+
+
+
+<!--       <ul>
+            <li ng-repeat="list in tasklist" > <td>{{list.title}}</td><td>  {{list.Priority}}</td>
+            <ul style="margin-left:10px">
+            <li ng-repeat="task in list.taskname" >   
+                {{task.title}}        
+            </li>
+            </ul>
+            </li>
+          </ul> -->
+
+
+        </div>
+
+        <div style="margin-left:850px" ng-show="status">
+
+          <table  class="table table-hover" style="border: 2px solid black;" >
+            <tr>
+              <td>
+                <h4>Task Details</h4>
+                <br>
+                <lable>Title</lable>
+                <input type="text" class="form-control" ng-model="title">
+                <br>
+                <lable>Description</lable>
+                <textarea class="form-control" rows="4" cols="50" ng-model="desc"></textarea>
+                <br>
+                <lable>Priority</lable>
+                <select ng-model="pvalue">
+                  <option value="Normal">Normal</option>
+                  <option value="Major">Major</option>
+                  <option value="Critical">Critical</option>
+                </select>
+
+                <lable style="margin-left:30px">Status</lable>
+                <select ng-model="svalue">
+                  <option value="ToDo">ToDo</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Done">Done</option>
+                </select>
+                <br>
+                <br> <br>
+                <label>Due Date</label>
+                <br>
+
+                <input type="text" class="form-control" ng-model="duedate">
+<!--  <p class="input-group">
+          <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+              {{dt | date:'fullDate' }}
+            -->
+            <br>
+            <input type="hidden" ng-model="today">
+            <label>Parent</label>
+            <br>
+            <select ng-model="parentvalue">
+             <option ng-repeat="task in tasklist">{{task.title}}</option>
+             <option >none</option>
+           </select>
+           <br><br>
+           <button class="btn btn-primary btn-sm" ng-click="saveTask()">Save</button>
+           <br><br>
+           <div style="float:left"><button class="btn btn-primary btn-sm" ng-click="deleteTask();">Delete</button>
+           </div>  
+           <div style="float:right"><button class="btn btn-primary btn-sm" ng-click="cancleTask()">Cancle</button>
+           </div>  
+         </td>  </tr>
+       </table>
+
+     </div>
+   </div>
+ </div>
+
+ <!-- third party js -->
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+
+ <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+ <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
+
+ <script src="ui-bootstrap-tpls-1.3.3.min.js"></script>
+ <script src="app.js"></script>
+ <!-- <script src="factory.js"></script> -->
+
+ <!-- Our application scripts -->
+
+
+</body>
+</html>
